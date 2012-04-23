@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace BeanstalkApp_Sharp
+namespace beanstalkapp_net
 {
     public static class Beanstalk
     {
@@ -50,6 +52,19 @@ namespace BeanstalkApp_Sharp
 
                 var s = wc.DownloadString(ApiUrl + relativeUrl);
                 return s;
+            }
+        }
+
+        public static void Upload(string relativeUrl, string method, object parameters)
+        {
+            var serial = JsonConvert.SerializeObject(parameters);
+
+            using (var wc = new WebClient())
+            {
+                wc.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                wc.Credentials = new NetworkCredential(Username, Password);
+
+                wc.UploadString(ApiUrl + relativeUrl, method, serial);
             }
         }
     }

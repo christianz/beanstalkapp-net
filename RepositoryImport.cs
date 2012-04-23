@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace BeanstalkApp_Sharp
+namespace beanstalkapp_net
 {
     public class RepositoryImport
     {
@@ -35,6 +35,17 @@ namespace BeanstalkApp_Sharp
         public static RepositoryImport Find(int id)
         {
             return Beanstalk.Get<RepositoryImport>("/repository_imports/" + id + ".json");
+        }
+
+        public void Create()
+        {
+            Beanstalk.Upload("/" + RepositoryId + "/repository_imports.json", "POST", new
+            {
+                repository_import = new
+                {
+                    uri = Uri
+                }
+            });
         }
     }
 }

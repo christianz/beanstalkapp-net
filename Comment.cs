@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace BeanstalkApp_Sharp
+namespace beanstalkapp_net
 {
     public class Comment
     {
@@ -67,6 +67,20 @@ namespace BeanstalkApp_Sharp
         public static Comment Find(int repositoryId, int commentId)
         {
             return Beanstalk.Get<Comment>("/" + repositoryId + "/comments/" + commentId + ".json");
+        }
+
+        public void Create()
+        {
+            Beanstalk.Upload("/" + RepositoryId + "/comments.json", "POST", new
+                                                                                {
+                                                                                    comment = new
+                                                                                                  {
+                                                                                                      body = Body,
+                                                                                                      revision = Revision,
+                                                                                                      file_path = FilePath,
+                                                                                                      line_number = LineNumber
+                                                                                                  }
+                                                                                });
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace BeanstalkApp_Sharp
+namespace beanstalkapp_net
 {
     public class Release
     {

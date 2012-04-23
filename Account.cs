@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace BeanstalkApp_Sharp
+namespace beanstalkapp_net
 {
     public class Account
     {
@@ -35,6 +35,18 @@ namespace BeanstalkApp_Sharp
         public static Account Find()
         {
             return Beanstalk.Get<Account>("/account.json");
+        }
+
+        public void Save()
+        {
+            Beanstalk.Upload("/account.json", "PUT", new
+                                                         {
+                                                             account = new
+                                                                           {
+                                                                               name = Name,
+                                                                               time_zone = TimeZone
+                                                                           }
+                                                         });
         }
     }
 }

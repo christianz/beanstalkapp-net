@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 
-namespace BeanstalkApp_Sharp
+namespace beanstalkapp_net
 {
     public class Repository
     {
@@ -52,6 +50,37 @@ namespace BeanstalkApp_Sharp
         public static Repository Find(int id)
         {
             return Beanstalk.Get<Repository>("/repositories/" + id + ".json");
+        }
+
+        public void Create(bool createStructure)
+        {
+            Beanstalk.Upload("/repositories.json", "POST", new
+            {
+                repository = new
+                {
+                    type_id = Vcs,
+                    name = Name,
+                    title = Title,
+                    color_label = ColorLabel,
+                    default_branch = DefaultBranch,
+                    create_structure = createStructure
+                }
+            });
+        }
+
+        public void Save()
+        {
+            Beanstalk.Upload("/repositories.json", "PUT", new
+            {
+                repository = new
+                {
+                    type_id = Vcs,
+                    name = Name,
+                    title = Title,
+                    color_label = ColorLabel,
+                    default_branch = DefaultBranch
+                }
+            });
         }
     }
 }

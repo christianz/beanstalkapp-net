@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace BeanstalkApp_Sharp
+namespace beanstalkapp_net
 {
     public class Invitation
     {
@@ -38,9 +38,30 @@ namespace BeanstalkApp_Sharp
             return Beanstalk.GetMany<Invitation>("/invitations.json");
         }
 
-        public static Invitation Find(int id)
+        public static Invitation Find(int invitationId)
         {
-            return Beanstalk.Get<Invitation>("/invitations/" + id + ".json");
+            return Beanstalk.Get<Invitation>("/invitations/" + invitationId + ".json");
+        }
+
+        public void Create(string userEmail, string userFirstName, string userLastName)
+        {
+            Beanstalk.Upload("/invitations.json", "POST", new
+            {
+                invitation = new
+                {
+                    user = new
+                    {
+                        email = userEmail,
+                        first_name = userFirstName,
+                        last_name = userLastName
+                    }
+                }
+            });
+        }
+
+        public void Resend(int userId)
+        {
+            Beanstalk.Upload("/invitations/resend/" + userId + ".json", "PUT", null);
         }
     }
 }

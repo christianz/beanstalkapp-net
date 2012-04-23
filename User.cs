@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 
-namespace BeanstalkApp_Sharp
+namespace beanstalkapp_net
 {
     public class User
     {
@@ -41,6 +39,8 @@ namespace BeanstalkApp_Sharp
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
 
+        public string Password { private get; set; }
+
         public static IEnumerable<User> FindAll()
         {
             return Beanstalk.GetMany<User>("/users.json");
@@ -54,6 +54,45 @@ namespace BeanstalkApp_Sharp
         public static User FindCurrent()
         {
             return Beanstalk.Get<User>("/users/current.json");
+        }
+
+        public void Create()
+        {
+            Beanstalk.Upload("/users.json", "POST", new
+            {
+                user = new
+                {
+                    admin = Admin,
+                    timezone = TimeZone,
+                    last_name = LastName,
+                    login = Login,
+                    first_name = FirstName,
+                    email = Email,
+                    password = Password
+                }
+            });
+        }
+
+        public void Save()
+        {
+            Beanstalk.Upload("/users.json", "PUT", new
+            {
+                user = new
+                {
+                    admin = Admin,
+                    timezone = TimeZone,
+                    last_name = LastName,
+                    login = Login,
+                    first_name = FirstName,
+                    email = Email,
+                    password = Password
+                }
+            });
+        }
+
+        public void Delete()
+        {
+            Beanstalk.Upload("/users/" + Id + ".json", "DELETE", null);
         }
     }
 }

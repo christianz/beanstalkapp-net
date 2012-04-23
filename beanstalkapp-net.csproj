@@ -58,6 +58,7 @@
     <Compile Include="Account.cs" />
     <Compile Include="Beanstalk.cs" />
     <Compile Include="Changeset.cs" />
+    <Compile Include="ColorLabel.cs" />
     <Compile Include="Comment.cs" />
     <Compile Include="FeedKey.cs" />
     <Compile Include="Integration.cs" />
@@ -70,11 +71,18 @@
     <Compile Include="ReleaseServer.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="RepositoryImport.cs" />
+    <Compile Include="RepositoryType.cs" />
     <Compile Include="ServerEnvironment.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="lib\Newtonsoft.Json.dll" />
+    <Content Include="lib\Newtonsoft.Json.pdb" />
+    <Content Include="lib\Newtonsoft.Json.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

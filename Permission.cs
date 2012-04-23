@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace BeanstalkApp_Sharp
+namespace beanstalkapp_net
 {
     public class Permission
     {
@@ -29,6 +29,27 @@ namespace BeanstalkApp_Sharp
         public static IEnumerable<Permission> FindAllForUser(int userId)
         {
             return Beanstalk.GetMany<Permission>("/permissions/" + userId + ".json");
+        }
+        
+        public void Create()
+        {
+            Beanstalk.Upload("/permissions.json", "POST", new
+            {
+                permission = new
+                {
+                    user_id = UserId,
+                    repository_id = RepositoryId,
+                    write = Write,
+                    server_environment_id = ServerEnvironmentId,
+                    full_deployments_access = FullDeploymentsAccess,
+                    read = Read
+                }
+            });
+        }
+
+        public void Delete()
+        {
+            Beanstalk.Upload("/permissions/" + Id + ".json", "DELETE", null);
         }
     }
 }

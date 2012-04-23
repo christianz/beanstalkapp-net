@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace BeanstalkApp_Sharp
+namespace beanstalkapp_net
 {
     public class PublicKey
     {
@@ -29,19 +29,48 @@ namespace BeanstalkApp_Sharp
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
 
-        public static IEnumerable<PublicKey> FindForUser(int userId = -1)
+        public static IEnumerable<PublicKey> FindAll()
         {
-            var url = "/public_keys";
+            return Beanstalk.GetMany<PublicKey>("/public_keys.json");
+        }
 
-            if (userId != -1)
-                url += "?user_id=" + userId;
-
-            return Beanstalk.GetMany<PublicKey>(url + ".json");
+        public static IEnumerable<PublicKey> FindForUser(int userId)
+        {
+            return Beanstalk.GetMany<PublicKey>("/public_keys.json?user_id=" + userId);
         }
 
         public static PublicKey Find(int publicKeyId)
         {
             return Beanstalk.Get<PublicKey>("/public_keys/" + publicKeyId + ".json");
+        }
+
+        public void Create()
+        {
+            Beanstalk.Upload("/public_key.json", "POST", new
+            {
+                public_keys = new
+                {
+                    name = Name,
+                    content = Content
+                }
+            });
+        }
+
+        public void Save()
+        {
+            Beanstalk.Upload("/public_key/" + Id + ".json", "PUT", new
+            {
+                public_keys = new
+                {
+                    name = Name,
+                    content = Content
+                }
+            });
+        }
+
+        public void Delete()
+        {
+            Beanstalk.Upload("/public_keys/" + Id + ".json", "DELETE", null);
         }
     }
 }
