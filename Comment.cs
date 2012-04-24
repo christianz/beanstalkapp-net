@@ -71,7 +71,7 @@ namespace beanstalkapp_net
 
         public void Create()
         {
-            Beanstalk.Upload("/" + RepositoryId + "/comments.json", "POST", new
+            Beanstalk.Update("/" + RepositoryId + "/comments.json", "POST", new
                                                                                 {
                                                                                     comment = new
                                                                                                   {

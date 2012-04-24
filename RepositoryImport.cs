@@ -39,7 +39,7 @@ namespace beanstalkapp_net
 
         public void Create()
         {
-            Beanstalk.Upload("/" + RepositoryId + "/repository_imports.json", "POST", new
+            Beanstalk.Update("/" + RepositoryId + "/repository_imports.json", "POST", new
             {
                 repository_import = new
                 {

@@ -46,7 +46,7 @@ namespace beanstalkapp_net
 
         public void Create()
         {
-            Beanstalk.Upload("/public_key.json", "POST", new
+            Beanstalk.Update("/public_key.json", "POST", new
             {
                 public_keys = new
                 {
@@ -58,7 +58,7 @@ namespace beanstalkapp_net
 
         public void Save()
         {
-            Beanstalk.Upload("/public_key/" + Id + ".json", "PUT", new
+            Beanstalk.Update("/public_key/" + Id + ".json", "PUT", new
             {
                 public_keys = new
                 {
@@ -70,7 +70,7 @@ namespace beanstalkapp_net
 
         public void Delete()
         {
-            Beanstalk.Upload("/public_keys/" + Id + ".json", "DELETE", null);
+            Beanstalk.Update("/public_keys/" + Id + ".json", "DELETE");
         }
     }
 }

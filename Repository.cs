@@ -54,7 +54,7 @@ namespace beanstalkapp_net
 
         public void Create(bool createStructure)
         {
-            Beanstalk.Upload("/repositories.json", "POST", new
+            Beanstalk.Update("/repositories.json", "POST", new
             {
                 repository = new
                 {
@@ -70,7 +70,7 @@ namespace beanstalkapp_net
 
         public void Save()
         {
-            Beanstalk.Upload("/repositories.json", "PUT", new
+            Beanstalk.Update("/repositories.json", "PUT", new
             {
                 repository = new
                 {

@@ -57,7 +57,7 @@ namespace beanstalkapp_net
 
         public void Create(bool deployFromScratch)
         {
-            Beanstalk.Upload("/" + RepositoryId + "/releases.json?environment_id=" + EnvironmentId, "POST", new
+            Beanstalk.Update("/" + RepositoryId + "/releases.json?environment_id=" + EnvironmentId, "POST", new
             {
                 release = new
                 {
@@ -71,7 +71,7 @@ namespace beanstalkapp_net
 
         public void Retry(int releaseId)
         {
-            Beanstalk.Upload("/" + RepositoryId + "/releases/" + releaseId + "/retry.json", "PUT", null);
+            Beanstalk.Update("/" + RepositoryId + "/releases/" + releaseId + "/retry.json", "PUT");
         }
     }
 }

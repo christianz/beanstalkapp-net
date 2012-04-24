@@ -39,7 +39,7 @@ namespace beanstalkapp_net
 
         public void Save()
         {
-            Beanstalk.Upload("/account.json", "PUT", new
+            Beanstalk.Update("/account.json", "PUT", new
                                                          {
                                                              account = new
                                                                            {

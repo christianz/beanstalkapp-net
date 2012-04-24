@@ -45,7 +45,7 @@ namespace beanstalkapp_net
 
         public void Create(string userEmail, string userFirstName, string userLastName)
         {
-            Beanstalk.Upload("/invitations.json", "POST", new
+            Beanstalk.Update("/invitations.json", "POST", new
             {
                 invitation = new
                 {
@@ -61,7 +61,7 @@ namespace beanstalkapp_net
 
         public void Resend(int userId)
         {
-            Beanstalk.Upload("/invitations/resend/" + userId + ".json", "PUT", null);
+            Beanstalk.Update("/invitations/resend/" + userId + ".json", "PUT");
         }
     }
 }

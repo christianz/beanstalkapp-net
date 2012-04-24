@@ -48,7 +48,7 @@ namespace beanstalkapp_net
 
         public void Create(string repositoryId)
         {
-            Beanstalk.Upload("/" + repositoryId + "/server_environments.json", "POST", new
+            Beanstalk.Update("/" + repositoryId + "/server_environments.json", "POST", new
             {
                 server_environment = new
                 {
@@ -62,7 +62,7 @@ namespace beanstalkapp_net
 
         public void Save()
         {
-            Beanstalk.Upload("/" + RepositoryId + "/server_environments/" + Id + ".json", "PUT", new
+            Beanstalk.Update("/" + RepositoryId + "/server_environments/" + Id + ".json", "PUT", new
             {
                 server_environment = new
                 {

@@ -89,7 +89,7 @@ namespace beanstalkapp_net
 
         public void Create()
         {
-            Beanstalk.Upload("/" + RepositoryId + "/release_servers.json", "POST", new
+            Beanstalk.Update("/" + RepositoryId + "/release_servers.json", "POST", new
             {
                 release_server = new
                 {
@@ -105,7 +105,7 @@ namespace beanstalkapp_net
 
         public void Save()
         {
-            Beanstalk.Upload("/" + RepositoryId + "/release_servers/" + Id + ".json", "PUT", new
+            Beanstalk.Update("/" + RepositoryId + "/release_servers/" + Id + ".json", "PUT", new
             {
                 release_server = new
                 {
@@ -121,7 +121,7 @@ namespace beanstalkapp_net
 
         public void Delete()
         {
-            Beanstalk.Upload("/" + RepositoryId + "/release_servers/" + Id + ".json", "DELETE", null);
+            Beanstalk.Update("/" + RepositoryId + "/release_servers/" + Id + ".json", "DELETE");
         }
     }
 }

@@ -58,7 +58,7 @@ namespace beanstalkapp_net
 
         public void Create()
         {
-            Beanstalk.Upload("/users.json", "POST", new
+            Beanstalk.Update("/users.json", "POST", new
             {
                 user = new
                 {
@@ -75,7 +75,7 @@ namespace beanstalkapp_net
 
         public void Save()
         {
-            Beanstalk.Upload("/users.json", "PUT", new
+            Beanstalk.Update("/users.json", "PUT", new
             {
                 user = new
                 {
@@ -92,7 +92,7 @@ namespace beanstalkapp_net
 
         public void Delete()
         {
-            Beanstalk.Upload("/users/" + Id + ".json", "DELETE", null);
+            Beanstalk.Update("/users/" + Id + ".json", "DELETE");
         }
     }
 }

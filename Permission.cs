@@ -33,7 +33,7 @@ namespace beanstalkapp_net
         
         public void Create()
         {
-            Beanstalk.Upload("/permissions.json", "POST", new
+            Beanstalk.Update("/permissions.json", "POST", new
             {
                 permission = new
                 {
@@ -49,7 +49,7 @@ namespace beanstalkapp_net
 
         public void Delete()
         {
-            Beanstalk.Upload("/permissions/" + Id + ".json", "DELETE", null);
+            Beanstalk.Update("/permissions/" + Id + ".json", "DELETE");
         }
     }
 }

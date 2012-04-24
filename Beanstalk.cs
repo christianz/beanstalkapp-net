@@ -55,8 +55,16 @@ namespace beanstalkapp_net
             }
         }
 
-        public static void Upload(string relativeUrl, string method, object parameters)
+        public static void Update(string relativeUrl, string method)
         {
+            Update(relativeUrl, method, null);
+        }
+
+        public static void Update(string relativeUrl, string method, object parameters)
+        {
+            if (!relativeUrl.StartsWith("/"))
+                throw new Exception("Relative URL must start with '/'.");
+
             var serial = JsonConvert.SerializeObject(parameters);
 
             using (var wc = new WebClient())
