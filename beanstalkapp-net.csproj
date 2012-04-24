@@ -63,6 +63,7 @@
     <Compile Include="FeedKey.cs" />
     <Compile Include="Integration.cs" />
     <Compile Include="Invitation.cs" />
+    <None Include="MIT-LICENSE" />
     <Compile Include="Permission.cs" />
     <Compile Include="Plan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
