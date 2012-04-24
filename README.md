@@ -33,5 +33,5 @@ For information about all API methods please go to the official documentation si
 
 http://api.beanstalkapp.com
 
-Copyright (c) 2011 Christian Zachariasen, io7 Software.
+Copyright (c) 2012 Christian Zachariasen, io7 Software.
 Released under the MIT license
