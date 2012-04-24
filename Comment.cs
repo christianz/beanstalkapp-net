@@ -72,15 +72,15 @@ namespace beanstalkapp_net
         public void Create()
         {
             Beanstalk.Update("/" + RepositoryId + "/comments.json", "POST", new
-                                                                                {
-                                                                                    comment = new
-                                                                                                  {
-                                                                                                      body = Body,
-                                                                                                      revision = Revision,
-                                                                                                      file_path = FilePath,
-                                                                                                      line_number = LineNumber
-                                                                                                  }
-                                                                                });
+            {
+                comment = new
+                {
+                    body = Body,
+                    revision = Revision,
+                    file_path = FilePath,
+                    line_number = LineNumber
+                }
+            });
         }
     }
 }

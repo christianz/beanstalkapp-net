@@ -40,13 +40,13 @@ namespace beanstalkapp_net
         public void Save()
         {
             Beanstalk.Update("/account.json", "PUT", new
-                                                         {
-                                                             account = new
-                                                                           {
-                                                                               name = Name,
-                                                                               time_zone = TimeZone
-                                                                           }
-                                                         });
+            {
+                account = new
+                {
+                    name = Name,
+                    time_zone = TimeZone
+                }
+            });
         }
     }
 }
