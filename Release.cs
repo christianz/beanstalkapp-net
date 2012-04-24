@@ -54,5 +54,24 @@ namespace beanstalkapp_net
         {
             return Beanstalk.GetMany<Release>("/" + repositoryId + "/releases.json");
         }
+
+        public void Create(bool deployFromScratch)
+        {
+            Beanstalk.Upload("/" + RepositoryId + "/releases.json?environment_id=" + EnvironmentId, "POST", new
+            {
+                release = new
+                {
+                    comment = Comment,
+                    revision = Revision,
+                    environment_id = EnvironmentId,
+                    deploy_from_scratch = deployFromScratch
+                }
+            });
+        }
+
+        public void Retry(int releaseId)
+        {
+            Beanstalk.Upload("/" + RepositoryId + "/releases/" + releaseId + "/retry.json", "PUT", null);
+        }
     }
 }

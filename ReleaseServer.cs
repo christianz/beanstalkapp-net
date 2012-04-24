@@ -92,15 +92,36 @@ namespace beanstalkapp_net
             Beanstalk.Upload("/" + RepositoryId + "/release_servers.json", "POST", new
             {
                 release_server = new
-                                     {
-                                         name = Name,
-                                         local_path = LocalPath,
-                                         remote_path = RemotePath,
-                                         remote_addr = RemoteAddr,
-                                         protocol = Protocol,
-                                         port = Port,
-                                     }
+                {
+                    name = Name,
+                    local_path = LocalPath,
+                    remote_path = RemotePath,
+                    remote_addr = RemoteAddr,
+                    protocol = Protocol,
+                    port = Port,
+                }
             });
+        }
+
+        public void Save()
+        {
+            Beanstalk.Upload("/" + RepositoryId + "/release_servers/" + Id + ".json", "PUT", new
+            {
+                release_server = new
+                {
+                    name = Name,
+                    local_path = LocalPath,
+                    remote_path = RemotePath,
+                    remote_addr = RemoteAddr,
+                    protocol = Protocol,
+                    port = Port,
+                }
+            });
+        }
+
+        public void Delete()
+        {
+            Beanstalk.Upload("/" + RepositoryId + "/release_servers/" + Id + ".json", "DELETE", null);
         }
     }
 }
