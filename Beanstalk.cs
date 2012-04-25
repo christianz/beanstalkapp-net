@@ -15,6 +15,12 @@ namespace beanstalkapp_net
         internal static string Username;
         internal static string Password;
 
+        /// <summary>
+        /// Initializes the Beanstalk API with your username, password, and subdomain.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="domain"></param>
         public static void Initialize(string username, string password, string domain = null)
         {
             Username = username;
@@ -25,8 +31,34 @@ namespace beanstalkapp_net
 
         internal static T Get<T>(string relativeUrl)
         {
-            var jsonStr = GetJson(relativeUrl);
+            var jsonStr = DownloadJsonString(relativeUrl);
 
+            return Deserialize<T>(jsonStr);
+        }
+
+        internal static IEnumerable<T> GetMany<T>(string relativeUrl)
+        {
+            var array = JArray.Parse(DownloadJsonString(relativeUrl));
+
+            var arrayChildren = array.Select(a => a.Values().First());
+
+            return arrayChildren.Select(f => f.ToObject<T>());
+        }
+
+        internal static void Update(string relativeUrl, string method, object parameters = null)
+        {
+            UpdateInternal(relativeUrl, method, parameters);
+        }
+
+        internal static T Update<T>(string relativeUrl, string method, object parameters = null)
+        {
+            var result = UpdateInternal(relativeUrl, method, parameters);
+
+            return Deserialize<T>(result);
+        }
+
+        private static T Deserialize<T>(string jsonStr)
+        {
             var json = JObject.Parse(jsonStr);
             var firstChild = json.Values().FirstOrDefault();
 
@@ -36,16 +68,7 @@ namespace beanstalkapp_net
             return firstChild.ToObject<T>();
         }
 
-        public static IEnumerable<T> GetMany<T>(string relativeUrl)
-        {
-            var array = JArray.Parse(GetJson(relativeUrl));
-
-            var arrayChildren = array.Select(a => a.Values().First());
-
-            return arrayChildren.Select(f => f.ToObject<T>());
-        }
-
-        private static string GetJson(string relativeUrl)
+        private static string DownloadJsonString(string relativeUrl)
         {
             if (!relativeUrl.StartsWith("/"))
                 throw new Exception("Relative URL must start with '/'.");
@@ -54,20 +77,23 @@ namespace beanstalkapp_net
                 return wc.DownloadString(ApiUrl + relativeUrl);
         }
 
-        public static void Update(string relativeUrl, string method)
-        {
-            Update(relativeUrl, method, null);
-        }
-
-        public static void Update(string relativeUrl, string method, object parameters)
+        private static string UploadJsonString(string relativeUrl, string method, string data = "")
         {
             if (!relativeUrl.StartsWith("/"))
                 throw new Exception("Relative URL must start with '/'.");
 
-            var serial = JsonConvert.SerializeObject(parameters);
-
             using (var wc = SetupConnection())
-                wc.UploadString(ApiUrl + relativeUrl, method, serial);
+                return wc.UploadString(ApiUrl + relativeUrl, method, data);
+        }
+
+        private static string UpdateInternal(string relativeUrl, string method, object parameters = null)
+        {
+            var serial = "";
+
+            if (parameters != null)
+                serial = JsonConvert.SerializeObject(parameters);
+
+            return UploadJsonString(relativeUrl, method, serial);
         }
 
         private static WebClient SetupConnection()
