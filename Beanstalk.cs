@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Net;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -27,17 +25,24 @@ namespace beanstalkapp_net
 
         internal static T Get<T>(string relativeUrl)
         {
-            var json = JObject.Parse(GetJson(relativeUrl));
-            var str = json.First.First.ToString();
+            var jsonStr = GetJson(relativeUrl);
 
-            return JsonConvert.DeserializeObject<T>(str);
+            var json = JObject.Parse(jsonStr);
+            var firstChild = json.Values().FirstOrDefault();
+
+            if (firstChild == null)
+                return default(T);
+
+            return firstChild.ToObject<T>();
         }
 
         public static IEnumerable<T> GetMany<T>(string relativeUrl)
         {
             var array = JArray.Parse(GetJson(relativeUrl));
 
-            return array.Select(obj => obj.First.First.ToString()).Select(JsonConvert.DeserializeObject<T>);
+            var arrayChildren = array.Select(a => a.Values().First());
+
+            return arrayChildren.Select(f => f.ToObject<T>());
         }
 
         private static string GetJson(string relativeUrl)
@@ -45,14 +50,8 @@ namespace beanstalkapp_net
             if (!relativeUrl.StartsWith("/"))
                 throw new Exception("Relative URL must start with '/'.");
 
-            using (var wc = new WebClient())
-            {
-                wc.Headers.Add(HttpRequestHeader.ContentType, "application/json");
-                wc.Credentials = new NetworkCredential(Username, Password);
-
-                var s = wc.DownloadString(ApiUrl + relativeUrl);
-                return s;
-            }
+            using (var wc = SetupConnection())
+                return wc.DownloadString(ApiUrl + relativeUrl);
         }
 
         public static void Update(string relativeUrl, string method)
@@ -67,13 +66,18 @@ namespace beanstalkapp_net
 
             var serial = JsonConvert.SerializeObject(parameters);
 
-            using (var wc = new WebClient())
-            {
-                wc.Headers.Add(HttpRequestHeader.ContentType, "application/json");
-                wc.Credentials = new NetworkCredential(Username, Password);
-
+            using (var wc = SetupConnection())
                 wc.UploadString(ApiUrl + relativeUrl, method, serial);
-            }
+        }
+
+        private static WebClient SetupConnection()
+        {
+            var wc = new WebClient();
+
+            wc.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+            wc.Credentials = new NetworkCredential(Username, Password);
+
+            return wc;
         }
     }
 }
