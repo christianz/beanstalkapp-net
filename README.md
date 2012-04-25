@@ -27,7 +27,7 @@ Reference beanstalkapp_net.dll in your project and initialize the wrapper like t
 
 Then you can start using the API:
 
-    var accounts = Account.Find();
+    var account = Account.Find();
  
 For information about all API methods please go to the official documentation site:
 
