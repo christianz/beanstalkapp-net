@@ -97,6 +97,13 @@ namespace beanstalkapp_net
             });
         }
 
+        /// <summary>
+        /// Delete Permission
+        /// 
+        /// Admin privileges required for this API method.
+        /// 
+        /// This method allows you to remove any permissions for a specified user in a specified repository.
+        /// </summary>
         public void Delete()
         {
             Beanstalk.Update("/permissions/" + Id + ".json", "DELETE");

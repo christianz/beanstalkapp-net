@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
@@ -83,7 +84,40 @@ namespace beanstalkapp_net
                 throw new Exception("Relative URL must start with '/'.");
 
             using (var wc = SetupConnection())
-                return wc.UploadString(ApiUrl + relativeUrl, method, data);
+            {
+                try
+                {
+                    return wc.UploadString(ApiUrl + relativeUrl, method, data);
+                }
+                catch (WebException e)
+                {
+                    if (e.Status != WebExceptionStatus.ProtocolError)
+                        throw;
+                     
+                    var response = ((HttpWebResponse) e.Response);
+                    string responseStr;
+
+                    using (var stream = response.GetResponseStream())
+                    {
+                        if (stream == null)
+                            throw;
+
+                        try
+                        {
+                            using (var reader = new StreamReader(stream))
+                            {
+                                responseStr = reader.ReadToEnd();
+                            }
+                        }
+                        catch
+                        {
+                            throw e;
+                        }
+                    }
+
+                    return responseStr;
+                }
+            }
         }
 
         private static string UpdateInternal(string relativeUrl, string method, object parameters = null)
@@ -93,7 +127,21 @@ namespace beanstalkapp_net
             if (parameters != null)
                 serial = JsonConvert.SerializeObject(parameters);
 
-            return UploadJsonString(relativeUrl, method, serial);
+            var result = UploadJsonString(relativeUrl, method, serial);
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                var joResult = JObject.Parse(result);
+
+                if (joResult["errors"] != null)
+                {
+                    var errorCollection = JArray.Parse(joResult["errors"].ToString());
+
+                    throw new ArgumentException(errorCollection.First().ToString());
+                }
+            }
+
+            return result;
         }
 
         private static WebClient SetupConnection()

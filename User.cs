@@ -120,9 +120,6 @@ namespace beanstalkapp_net
         /// </summary>
         public User Create()
         {
-            if (string.IsNullOrEmpty(Login))
-                throw new Exception("Login can't be blank.");
-
             return Beanstalk.Update<User>("/users.json", "POST", new
             {
                 user = new
